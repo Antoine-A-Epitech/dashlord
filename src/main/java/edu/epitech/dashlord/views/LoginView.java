@@ -32,8 +32,11 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         setAlignItems(Alignment.CENTER);
 
         var usernameField = new TextField("Username");
+        usernameField.setRequired(true);
         var passwordField = new PasswordField("Password");
+        passwordField.setRequired(true);
         var loginButton = new Button("Login");
+
         loginButton.addClickListener(event -> {
             try{
                 authService.authenticate(usernameField.getValue(), passwordField.getValue());

@@ -6,9 +6,7 @@ import com.vaadin.flow.server.VaadinSession;
 import edu.epitech.dashlord.data.entities.Role;
 import edu.epitech.dashlord.data.entities.User;
 import edu.epitech.dashlord.data.repositories.UserRepository;
-import edu.epitech.dashlord.views.AdminView;
-import edu.epitech.dashlord.views.DashboardView;
-import edu.epitech.dashlord.views.MainView;
+import edu.epitech.dashlord.views.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -51,8 +49,10 @@ public class AuthService {
 
         if(role.equals(Role.USER)) {
             routes.add(new AuthorizedRoute("dashboard", "Dashboard", DashboardView.class));
+            routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("dashboard", "Dashboard", DashboardView.class));
+            routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
             routes.add(new AuthorizedRoute("admin", "Admin", AdminView.class));
         }
 

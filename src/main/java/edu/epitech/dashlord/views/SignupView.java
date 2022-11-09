@@ -43,6 +43,7 @@ public class SignupView extends VerticalLayout {
 
         usernameField = new TextField();
         usernameField.setLabel("Username");
+        usernameField.setRequired(true);
 
         emailField = new EmailField();
         emailField.setLabel("Email");
@@ -52,25 +53,30 @@ public class SignupView extends VerticalLayout {
         emailField.setClearButtonVisible(true);
 
         passwordField = new PasswordField();
+        passwordField.setRequired(true);
         passwordField.setLabel("Password");
 
-        signupButton = new Button("Login");
+        signupButton = new Button("Signup");
         signupButton.addClickListener(event -> {
             try {
                 registerUser(event);
                 UI.getCurrent().navigate("login");
             } catch (Error e) {
-                Notification.show("Username already exists.");
+                Notification.show(e.getMessage());
             }
         });
 
-        Button signinButton = new Button("Sign In");
+        Button signinButton = new Button("Login");
         signinButton.addClickListener(click -> UI.getCurrent().navigate("login"));
 
         add(title , usernameField, emailField, passwordField, signupButton, signinButton);
     }
 
-    private void registerUser(ClickEvent event) {
+    private void registerUser(ClickEvent event) throws Error {
+        if(usernameField.getValue().equals(""))throw new Error("A username is required.");
+        if(emailField.getValue().equals(""))throw new Error("An email is required.");
+        if(passwordField.getValue().equals(""))throw new Error("A password is required.");
+
         // In here we will do the checking for the registration
         User user = userRepository.getByUsername(usernameField.getValue());
         // If no user was found in the db
