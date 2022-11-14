@@ -3,11 +3,9 @@ package edu.epitech.dashlord.data.entities;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "users")
 public class User {
@@ -24,8 +22,6 @@ public class User {
 
     private Role role;
 
-    private String activationCode;
-    private boolean active;
     private LocalDateTime createdAt;
 
     public User() { }
@@ -78,26 +74,6 @@ public class User {
 
     public void setUserName(String userName) {
         this.username = userName;
-    }
-
-    public String getActivationCode() {
-        return activationCode;
-    }
-
-    public void setActivationCode(String activationCode) {
-        this.activationCode = activationCode;
-    }
-
-    public static String generateActivationCode() {
-        return RandomStringUtils.randomAlphanumeric(32);
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public LocalDateTime getCreatedAt() {

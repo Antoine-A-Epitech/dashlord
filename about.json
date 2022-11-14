@@ -1,0 +1,15 @@
+{
+  "services": [{
+    "name": "CryptoCompare",
+    "logoUrl": "https://www.lejmed.fr/wp-content/uploads/2022/11/les-crypto-qui-vont-exploser-en-2023.jpg",
+    "widgets" : [{
+      "name":"Ethereum Price",
+      "description": "Will give you the current Ethereum Price",
+      "params": [],
+      "requiresKey": "false",
+      "key": "",
+      "endpointUrl" : "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,JPY,EUR",
+      "logoUrl": "https://www.lejmed.fr/wp-content/uploads/2022/11/les-crypto-qui-vont-exploser-en-2023.jpg"
+    }]
+  }]
+}

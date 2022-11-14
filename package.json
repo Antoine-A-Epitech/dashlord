@@ -105,7 +105,9 @@
     "@vaadin/virtual-list": "23.2.8",
     "construct-style-sheets-polyfill": "3.1.0",
     "date-fns": "2.29.3",
-    "lit": "2.3.0"
+    "dotenv": "^16.0.3",
+    "lit": "2.3.0",
+    "mysql2": "^2.3.3"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "3.1.0",
@@ -245,7 +247,7 @@
       "workbox-core": "6.5.0",
       "workbox-precaching": "6.5.0"
     },
-    "hash": "7703c1426a251e6281617b9f101b8542d965c2188282cf6a6a86bfad24b80968"
+    "hash": "ee00074e57415bd49477519c26629c3b330ac42db6b8980661605bafeac2d44d"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -350,6 +352,8 @@
     "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
     "lit": "$lit",
     "@polymer/polymer": "$@polymer/polymer",
-    "date-fns": "$date-fns"
+    "date-fns": "$date-fns",
+    "dotenv": "$dotenv",
+    "mysql2": "$mysql2"
   }
 }
