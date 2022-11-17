@@ -1,0 +1,87 @@
+:root {
+    --font-base: "Poppins";
+    --card-background : #fff;
+    --body-background : #f2f2f2;
+}
+
+* {
+    font-family: var(--font-base), sans-serif;
+}
+
+body {
+    background: var(--body-background);
+}
+
+.auth_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*align-items: stretch;*/
+    background-color: var(--card-background);
+    border-radius: 20px;
+    padding: 10px 40px;
+    box-sizing: border-box;
+}
+
+.auth_card h1 {
+    text-align: center;
+}
+
+ vaadin-button {
+    margin: 15px auto;
+     color: #000;
+}
+
+vaadin-button:hover {
+    color: #fff;
+    background-color: #000;
+}
+
+.container {
+    margin: 0 auto;
+    display: grid;
+    /*grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));*/
+    grid-template-columns: repeat(auto-fit, 240px);
+    grid-gap: 20px;
+    padding: 5px 20px 10px;
+}
+
+.card {
+    display: flex;
+    background-color: var(--card-background);
+    border-radius: 20px;
+    box-sizing: border-box;
+    margin: 10px auto;
+    padding: 10px;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+img {
+    width: 100px;
+    height: 80px;
+    border-radius: 20px;
+    /*margin: 10px;*/
+}
+
+h1 {
+    margin: 20px 8px;
+}
+
+vaadin-menu-bar {
+    width: 100%;
+}
+
+.removeButton {
+    border-radius: 100px;
+    margin: 0;
+}
+
+.horizontalLayout {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+vaadin- {
+    background-color: #b94a48;
+}

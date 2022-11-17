@@ -50,11 +50,11 @@ public class AuthService {
         if(role.equals(Role.USER)) {
             routes.add(new AuthorizedRoute("dashboard", "Dashboard", DashboardView.class));
             routes.add(new AuthorizedRoute("widgetstore", "Widget Store", WidgetStoreView.class));
-            routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
+//            routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("dashboard", "Dashboard", DashboardView.class));
             routes.add(new AuthorizedRoute("widgetstore", "Widget Store", WidgetStoreView.class));
-            routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
+//            routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
             routes.add(new AuthorizedRoute("admin", "Admin", AdminView.class));
         }
 

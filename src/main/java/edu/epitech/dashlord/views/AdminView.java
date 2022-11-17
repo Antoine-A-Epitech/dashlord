@@ -5,6 +5,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -115,7 +116,6 @@ public class AdminView extends VerticalLayout {
 
         widgetForm.add(widgetTitle, widgetName, description, requiresKey, reloadTime, endpointUrl, servicePicker, addWidgetButton);
 
-
-        add(serviceForm, servicesGrid, widgetForm, widgetsGrid);
+        add(serviceForm, servicesGrid,widgetForm, widgetsGrid);
     }
 }

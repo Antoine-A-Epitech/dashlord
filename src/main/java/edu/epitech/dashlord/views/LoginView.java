@@ -1,22 +1,21 @@
 package edu.epitech.dashlord.views;
 
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import edu.epitech.dashlord.data.services.AuthService;
 
-
-@Route("login")
+@Route(value = "login")
+@RouteAlias("")
 @PageTitle("Login")
 @AnonymousAllowed
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
@@ -35,9 +34,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         usernameField.setRequired(true);
         var passwordField = new PasswordField("Password");
         passwordField.setRequired(true);
-        var loginButton = new Button("Login");
-
-        loginButton.addClickListener(event -> {
+        var loginButton = new Button("Login",event -> {
             try{
                 authService.authenticate(usernameField.getValue(), passwordField.getValue());
                 UI.getCurrent().navigate("dashboard");
@@ -46,11 +43,13 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
             }
         });
 
-        Button signupButton = new Button("Signup");
-        signupButton.addClickListener(click -> UI.getCurrent().navigate("signup"));
-        signupButton.setSizeFull();
+        loginButton.addClickShortcut(Key.ENTER);
+        Button signupButton = new Button("Signup",click -> UI.getCurrent().navigate("signup"));
 
-        add(new H1("Welcome to Dashlord"), usernameField, passwordField, loginButton, signupButton);
+        Div div = new Div();
+        div.setClassName("auth_card");
+        div.add(new H1("Welcome to Dashlord"), usernameField, passwordField, loginButton, signupButton);
+        add(div);
     }
 
     @Override

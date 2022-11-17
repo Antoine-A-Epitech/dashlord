@@ -2,11 +2,20 @@ package edu.epitech.dashlord.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -14,6 +23,7 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import edu.epitech.dashlord.data.entities.User;
 import edu.epitech.dashlord.data.services.AuthService;
 
@@ -29,16 +39,16 @@ public class MainView extends AppLayout {
         // user the drawer for the section
         setPrimarySection(Section.DRAWER);
 
-        // Make the navbar a header
-        addToNavbar(true, createHeaderContent());
+        addHeaderContent();
 
         menu = createMenu();
 
         // Put the menu in the drawer
-        addToDrawer(createDrawerContent(menu));
+        addDrawerContent(menu);
     }
 
-    private Component createHeaderContent() {
+    private void addHeaderContent() {
+
         HorizontalLayout layout = new HorizontalLayout();
 
         // Configure the styling
@@ -47,28 +57,59 @@ public class MainView extends AppLayout {
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        // Have the drawer toggle button on the left
-        layout.add(new DrawerToggle());
-
         // Placeholder for the title of the current view.
         // The title will be set after navigation.
         viewTitle = new H1();
-        layout.add(viewTitle);
+        layout.add(new DrawerToggle(),viewTitle);
 
-        return layout;
+        addToNavbar(true,layout);
     }
 
-    private Component createDrawerContent(Tabs menu) {
+    private void addDrawerContent(Tabs menu) {
+
         VerticalLayout layout = new VerticalLayout();
-
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         layout.setSizeFull();
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
-        // Display the logo and the menu in the drawer
-        layout.add(menu);
-        return layout;
+        H1 appName = new H1("Dashlord");
+        appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.MEDIUM);
+        Header header = new Header(appName);
+
+        Scroller scroller = new Scroller(menu);
+
+        Div div = new Div();
+        div.add(header,scroller);
+        layout.add(div, createFooter());
+        addToDrawer(layout);
+    }
+
+    private Component createFooter() {
+        Footer footer = new Footer();
+        MenuBar menu = new MenuBar();
+        User user = VaadinSession.getCurrent().getAttribute(User.class);
+
+        Avatar avatar = new Avatar(user.getUserName());
+        avatar.setImage("");
+
+        MenuItem menuItem = menu.addItem("");
+
+        Div div = new Div();
+        div.add(avatar);
+        div.add(user.getUserName());
+        div.add(new Icon("lumo", "dropdown"));
+        div.getElement().getStyle().set("display", "flex");
+        div.getElement().getStyle().set("align-items", "center");
+        div.getElement().getStyle().set("gap", "var(--lumo-space-s)");
+
+        menuItem.add(div);
+        menuItem.getSubMenu().addItem("Sign out", event -> {
+            UI.getCurrent().getPage().setLocation("login");
+            VaadinSession.getCurrent().getSession().invalidate();
+            VaadinSession.getCurrent().close();
+        });
+        footer.setWidthFull();
+        footer.add(menu);
+        return footer;
     }
 
     private Tabs createMenu() {

@@ -13,6 +13,8 @@ import java.util.List;
 public class WidgetStoreView extends Div {
 
     public WidgetStoreView(WidgetRepository widgetRepository, UserWidgetService userWidgetService){
+        addClassName("container");
+
         // Add a widget component for each widget in the db
         List<Widget> widgets = widgetRepository.findAll();
 
@@ -20,5 +22,17 @@ public class WidgetStoreView extends Div {
             add(new WidgetComponent(widget, userWidgetService));
         });
 
+        // To remove
+        // ----------------------------------------------------------------
+        widgets.forEach(widget -> {
+            add(new WidgetComponent(widget, userWidgetService));
+        });widgets.forEach(widget -> {
+            add(new WidgetComponent(widget, userWidgetService));
+        });widgets.forEach(widget -> {
+            add(new WidgetComponent(widget, userWidgetService));
+        });widgets.forEach(widget -> {
+            add(new WidgetComponent(widget, userWidgetService));
+        });
+        //----------------------------------------------------------------
     }
 }
