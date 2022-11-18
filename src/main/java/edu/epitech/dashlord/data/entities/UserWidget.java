@@ -1,9 +1,9 @@
 package edu.epitech.dashlord.data.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.util.Timer;
 
 @Entity(name = "userswidgets")
 public class UserWidget {
@@ -19,6 +19,9 @@ public class UserWidget {
     private Widget widget;
 
     private String userKey;
+
+    @Transient
+    private Timer timer;
 
     public UserWidget(){}
 
@@ -53,5 +56,13 @@ public class UserWidget {
 
     public Integer getId() {
         return id;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
     }
 }

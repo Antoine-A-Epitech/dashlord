@@ -18,21 +18,9 @@ public class WidgetStoreView extends Div {
         // Add a widget component for each widget in the db
         List<Widget> widgets = widgetRepository.findAll();
 
-        widgets.forEach(widget -> {
-            add(new WidgetComponent(widget, userWidgetService));
-        });
 
-        // To remove
-        // ----------------------------------------------------------------
         widgets.forEach(widget -> {
             add(new WidgetComponent(widget, userWidgetService));
-        });widgets.forEach(widget -> {
-            add(new WidgetComponent(widget, userWidgetService));
-        });widgets.forEach(widget -> {
-            add(new WidgetComponent(widget, userWidgetService));
-        });widgets.forEach(widget -> {
-            add(new WidgetComponent(widget, userWidgetService));
         });
-        //----------------------------------------------------------------
     }
 }

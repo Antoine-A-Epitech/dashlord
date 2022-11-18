@@ -12,40 +12,41 @@ const connection = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
-// connection.query("DROP TABLE users_widgets", function(err, res) {
-//   if (err) {
-//     console.log(err);
-//   }
-//
-//   console.log(res);
-// })
+let widgetServices = {
+    services: [],
+};
 
-connection.query("DROP TABLE ", function(err, res) {
-  if (err) {
-    console.log(err);
-  }
-  console.log(res);
+
+
+connection.query("SELECT * FROM widgetservices",async function(err, res) {
+    if (err) {
+        console.log("Error while fetching the widget services :" ,err);
+    }
+
+
+    for(const widgetService of res) {
+        await new Promise((resolve, reject) => {
+            connection.query("SELECT * FROM widgets WHERE service_id = ?", [widgetService.id], function(err, widgets){
+                if (err) {
+                    reject(err);
+                }
+                widgetService.widgets = widgets;
+                resolve(widgetService);
+            })
+        });
+
+        widgetServices.services.push(widgetService);
+    }
+
+    let jsonObject = JSON.stringify(widgetServices);
+
+    fs.writeFile("./about.json", jsonObject, "utf8", function(err) {
+        if (err) {
+            console.log(err);
+        }
+
+        console.log("The about.json was created !");
+
+        process.exit();
+    })
 });
-
-
-
-// let services;
-//
-// fs.readFile('./about.json', (err, jsonString) => {
-//     if (err) {
-//         console.log(err);
-//         process.exit();
-//     }
-//
-//     try {
-//         services = JSON.parse(jsonString);
-//     } catch (e) {
-//         console.log(e);
-//         process.exit();
-//     }
-//
-//     services.forEach(service => {
-//
-//     })
-//
-// })

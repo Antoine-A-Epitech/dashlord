@@ -2,21 +2,24 @@ package edu.epitech.dashlord.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.VaadinSession;
 import edu.epitech.dashlord.components.Card;
 import edu.epitech.dashlord.data.apiModels.CryptoApi;
+import edu.epitech.dashlord.data.apiModels.JokesApi;
+import edu.epitech.dashlord.data.apiModels.WeatherApi;
 import edu.epitech.dashlord.data.entities.User;
 import edu.epitech.dashlord.data.entities.UserWidget;
 import edu.epitech.dashlord.data.entities.Widget;
 import edu.epitech.dashlord.data.services.UserWidgetService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -26,11 +29,10 @@ import java.util.TimerTask;
 @PageTitle("Dashboard")
 public class DashboardView extends Div {
 
-    //private FeederThread thread;
+    private String weatherEndpointUrl;
+
     public DashboardView(UserWidgetService userWidgetService) {
         addClassName("container");
-//        H1 title = new H1("Dashboard");
-//        add(title);
 
         // Get the current session user
         User currentUser = VaadinSession.getCurrent().getAttribute(User.class);
@@ -41,46 +43,125 @@ public class DashboardView extends Div {
         userWidgets.forEach(userWidget -> {
 
             Card card = new Card();
-            // Create a new div
-//            Div userWidgetDiv = new Div();
 
             Widget widget = userWidget.getWidget();
 
+            // Remove the button from the user's dashboard
             Button removeButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL),click -> {
                 // Remove the widget from the user widget table
                 userWidgetService.removeWidget(userWidget);
+
+                userWidget.getTimer().cancel();
+
+                card.setVisible(false);
             });
             removeButton.addClassName("removeButton");
 
+            H2 widgetName = new H2(widget.getName());
+
+
             HorizontalLayout horizontalLayout = new HorizontalLayout();
             horizontalLayout.setClassName("horizontalLayout");
-            horizontalLayout.add(removeButton);
+            horizontalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+            horizontalLayout.add(widgetName, removeButton);
 
-            H1 widgetName = new H1(widget.getName());
+
+            VerticalLayout widgetBody = new VerticalLayout();
+            widgetBody.addClassName("widgetBody");
+            widgetBody.setAlignItems(FlexComponent.Alignment.CENTER);
+
+
+            if (widget.getService().getName().equalsIgnoreCase("Weather")) {
+                weatherEndpointUrl = widget.getEndpointUrl() + "&q=montpellier" + "&aqi=no";
+
+                VerticalLayout searchBar = new VerticalLayout();
+
+                searchBar.setAlignItems(FlexComponent.Alignment.CENTER);
+                searchBar.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+                TextField cityNameInput = new TextField("City");
+                Button searchButton = new Button("Search");
+
+
+                searchButton.addClickListener(click -> {
+                    weatherEndpointUrl = widget.getEndpointUrl() + "&q=" + cityNameInput.getValue().toLowerCase() + "&aqi=no";
+                });
+                searchBar.add(cityNameInput, searchButton);
+                widgetBody.add(searchBar);
+            }
 
             widgetName.addAttachListener(c -> {
-                refreshValues(widgetName, widget, c.getUI());
+                refreshValues(widgetBody, userWidget, c.getUI());
             });
 
-            card.add(horizontalLayout, widgetName );
+            card.add(horizontalLayout, widgetBody);
+
             add(card);
         });
     }
 
-    private void refreshValues(H1 title, Widget widget, UI ui) {
+    private void refreshValues(VerticalLayout widgetBody, UserWidget userWidget, UI ui) {
         RestTemplate restTemplate = new RestTemplate();
-        if(widget.getService().getName().equals("Crypto")){
-            CryptoApi crypto =  restTemplate.getForObject(widget.getEndpointUrl(), CryptoApi.class);
+        if(userWidget.getWidget().getService().getName().equalsIgnoreCase("Crypto")){
+            CryptoApi crypto =  restTemplate.getForObject(userWidget.getWidget().getEndpointUrl(), CryptoApi.class);
             ui.access(() -> {
-                title.setText(crypto.getData().getAmount());
+                widgetBody.removeAll();
+                H4 priceHeader = new H4(String.format("%s USD", crypto.getData().getAmount()));
+                widgetBody.add(priceHeader);
+            });
+        } else if (userWidget.getWidget().getService().getName().equalsIgnoreCase("Jokes")) {
+            JokesApi joke = restTemplate.getForObject(userWidget.getWidget().getEndpointUrl(), JokesApi.class);
+            ui.access(() -> {
+                widgetBody.removeAll();
+                widgetBody.add(new Paragraph(joke.getJoke()));
+            });
+        } else if (userWidget.getWidget().getService().getName().equalsIgnoreCase("Weather")) {
+            WeatherApi weather = restTemplate.getForObject(weatherEndpointUrl, WeatherApi.class);
+            ui.access(() -> {
+                widgetBody.removeAll();
+
+                // For the icon
+                Image icon = new Image();
+                icon.setSrc("http:" + weather.getCurrent().getCondition().getIcon());
+
+                // For the temperature
+                H3 temperature = new H3(weather.getCurrent().getTemp_c() + "° C");
+
+                // For the location
+                Paragraph location = new Paragraph(weather.getLocation().getName() + ", " + weather.getLocation().getRegion());
+
+                VerticalLayout searchBar = new VerticalLayout();
+
+                searchBar.setAlignItems(FlexComponent.Alignment.CENTER);
+                searchBar.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+                TextField cityNameInput = new TextField("City");
+                Button searchButton = new Button("Search");
+
+
+                searchButton.addClickListener(click -> {
+                    userWidget.getTimer().cancel();
+
+                    weatherEndpointUrl = userWidget.getWidget().getEndpointUrl() + "&q=" + cityNameInput.getValue().toLowerCase() + "&aqi=no";
+
+                    refreshValues(widgetBody, userWidget, ui);
+                });
+                searchBar.add(cityNameInput, searchButton);
+
+
+                widgetBody.add(icon, temperature, location, searchBar);
             });
         }
+
         // Rerun after a certain amount of time
-        new Timer().schedule(new TimerTask() {
+        Timer timer = new Timer();
+
+        userWidget.setTimer(timer);
+
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                refreshValues(title, widget, ui);
+                refreshValues(widgetBody, userWidget, ui);
             }
-        }, widget.getReloadTime().longValue());
+        }, userWidget.getWidget().getReloadTime().longValue());
+
     }
 }

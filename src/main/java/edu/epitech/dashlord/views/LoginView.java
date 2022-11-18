@@ -3,6 +3,7 @@ package edu.epitech.dashlord.views;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
@@ -19,6 +20,11 @@ import edu.epitech.dashlord.data.services.AuthService;
 @PageTitle("Login")
 @AnonymousAllowed
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
+
+    /**
+     * URL that Spring uses to connect to Google services
+     */
+    private static final String OAUTH_URL = "/oauth2/authorization/google";
 
     private final LoginForm login = new LoginForm();
 

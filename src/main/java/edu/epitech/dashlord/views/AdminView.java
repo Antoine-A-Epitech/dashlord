@@ -1,9 +1,12 @@
 package edu.epitech.dashlord.views;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -95,11 +98,27 @@ public class AdminView extends VerticalLayout {
         servicePicker.setItems(services);
 
         Button addWidgetButton = new Button("Add");
+
+        List<Widget> widgets = widgetRepository.findAll();
+
         Grid<Widget> widgetsGrid = new Grid<>();
         widgetsGrid.addColumn(Widget::getName).setHeader("Name");
         widgetsGrid.addColumn(Widget::getEndpointUrl).setHeader("URL");
+        widgetsGrid.addColumn(new ComponentRenderer<>(Button::new, (button, widget) -> {
+            button.addThemeVariants(ButtonVariant.LUMO_ICON,
+                    ButtonVariant.LUMO_ERROR,
+                    ButtonVariant.LUMO_TERTIARY);
+            button.addClickListener(click -> {
+                // Delete the widget
+                widgets.remove(widget);
+                widgetRepository.deleteById(widget.getId());
 
-        List<Widget> widgets = widgetRepository.findAll();
+                // Refresh the grid
+                widgetsGrid.getDataProvider().refreshAll();
+                widgetsGrid.setItems(widgets);
+            });
+            button.setIcon(new Icon(VaadinIcon.TRASH));
+        })).setHeader("Delete");
 
         widgetsGrid.setItems(widgets);
 

@@ -1,15 +1,1 @@
-{
-  "services": [{
-    "name": "CryptoCompare",
-    "logoUrl": "https://www.lejmed.fr/wp-content/uploads/2022/11/les-crypto-qui-vont-exploser-en-2023.jpg",
-    "widgets" : [{
-      "name":"Ethereum Price",
-      "description": "Will give you the current Ethereum Price",
-      "params": [],
-      "requiresKey": "false",
-      "key": "",
-      "endpointUrl" : "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,JPY,EUR",
-      "logoUrl": "https://www.lejmed.fr/wp-content/uploads/2022/11/les-crypto-qui-vont-exploser-en-2023.jpg"
-    }]
-  }]
-}
+{"services":[{"id":7,"logo_url":"https://www.lejmed.fr/wp-content/uploads/2022/11/les-crypto-qui-vont-exploser-en-2023.jpg","name":"Crypto","widgets":[{"id":20,"description":"Sends live ethereum price","endpoint_url":"https://api.coinbase.com/v2/prices/ETH-USD/spot","name":"Ethereum Price","reload_time":10000,"requires_key":{"type":"Buffer","data":[0]},"service_id":7},{"id":32,"description":"Live bitcoin price. ","endpoint_url":"https://api.coinbase.com/v2/prices/BTC-USD/spot","name":"Bitcoin Price","reload_time":15000,"requires_key":{"type":"Buffer","data":[0]},"service_id":7}]},{"id":34,"logo_url":"https://i.guim.co.uk/img/media/a1b7129c950433c9919f5670c92ef83aa1c682d9/55_344_1971_1183/master/1971.jpg?width=620&quality=45&dpr=2&s=none","name":"Jokes","widgets":[{"id":37,"description":"Get random jokes every 2 mins.","endpoint_url":"https://v2.jokeapi.dev/joke/Any?type=single","name":"Random Jokes","reload_time":120000,"requires_key":{"type":"Buffer","data":[0]},"service_id":34}]},{"id":46,"logo_url":"https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather02-1024.png","name":"Weather","widgets":[{"id":50,"description":"Get the weather from a certain city. ","endpoint_url":"http://api.weatherapi.com/v1/current.json?key=1b6854a87a954af0ac5123910221811","name":"Weather","reload_time":720000,"requires_key":{"type":"Buffer","data":[0]},"service_id":46}]}]}
